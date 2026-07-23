@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="eng">
 <head>
     <meta charset="UTF-8">
-    <title>SAT Study Space</title>
+    <title>SAT Study Space, or might be Teach SAT Words, Master! smt. like that</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f0;
-            color: #222;
+            color: #0b0707;
             margin: 0;
             padding: 0;
         }
@@ -27,7 +27,7 @@
         }
 
         nav a {
-            color: white;
+            color: rgb(188, 169, 169);
             text-decoration: none;
             margin-right: 20px;
             font-size: 14px;
@@ -58,7 +58,7 @@
             background-color: #2b3a55;
             color: white;
             border: none;
-            padding: 10px 18px;
+            padding: 10px 20px;
             font-size: 14px;
             border-radius: 4px;
             cursor: pointer;
@@ -74,6 +74,12 @@
             font-size: 18px;
             font-weight: bold;
             color: #2b3a55;
+        }
+
+        #defBox {
+            font-size: 14px;
+            color: #444;
+            font-weight: normal;
         }
 
         footer {
@@ -105,11 +111,12 @@
             <li>Math formulas and notes</li>
         </ul>
 
-        <p>This page is just the beginning, the result of my selfeducation by YT tutorials and AI. More coming soon as I learn more!</p>
+        <p>This page is just the beginning. More coming soon as I learn more!</p>
 
-        <h2>Word of the Day (test button)</h2>
-        <button onclick="showWord()">Show a word</button>
+        <h2>Word of the Day</h2>
+        <button onclick="showNextWord()">Next word</button>
         <p id="wordBox"></p>
+        <p id="defBox"></p>
     </main>
 
     <footer>
@@ -117,8 +124,28 @@
     </footer>
 
     <script>
-        function showWord() {
-            document.getElementById("wordBox").innerText = "arduous - demanding sustained effort";
+// Handful of words that will be displayed in site, more will be added as a get the whole list of words via by my course.
+        var wordList = [
+            "arduous - deamanding sustained effort, hard",
+            "candid - honest and direct",
+            "concise - brief and to the point",
+            "lucid - clear, easy to follow",
+            "subtle - delicate, not obvious",
+        ];
+
+        var currentIndex = 0;
+
+        function showNextWord() {
+            var wordText = wordList[currentIndex];
+
+            document.getElementById("wordBox").innerText = wordText;
+
+            currentIndex = currentIndex + 1;
+
+        
+            if (currentIndex >= wordList.length) {
+                currentIndex = 0;
+            }
         }
     </script>
 
