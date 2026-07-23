@@ -27,7 +27,7 @@
         }
 
         nav a {
-            color: rgb(53, 207, 32);
+            color: white;
             text-decoration: none;
             margin-right: 20px;
             font-size: 14px;
@@ -62,30 +62,15 @@
             font-size: 14px;
             border-radius: 4px;
             cursor: pointer;
-            margin-top: 10px;
         }
 
         button:hover {
-            background-color: #1e2a40;
+            background-color: #1a2536;
         }
 
-        #wordBox {
-            margin-top: 15px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #2b3a55;
-        }
-
-        #defBox {
-            font-size: 15px;
-            color: #444;
-        }
-
-        footer {
-            margin-top: 40px;
-            padding: 20px 40px;
-            color: #777;
-            font-size: 14px;
+        .sentence {
+            font-style: italic;
+            color: #555;
         }
     </style>
 </head>
@@ -101,7 +86,8 @@
     </header>
 
     <main>
-        <p>Hi! This is a website I'm building to help me study for the SAT.</p>
+        <h2>Welcome</h2>
+        <p>This is my personal study space for the SAT.</p>
 
         <h2>What I'm planning to add</h2>
         <ul>
@@ -116,6 +102,8 @@
         <button onclick="showNextWord()">Next word</button>
         <p id="wordBox"></p>
         <p id="defBox"></p>
+        <p id="rootBox"></p>
+        <p id="sentenceBox" class="sentence"></p>
     </main>
 
     <footer>
@@ -123,13 +111,37 @@
     </footer>
 
     <script>
-      
         var wordList = [
-            { word: "arduous", def: "demanding sustained effort" },
-            { word: "candid", def: "honest and direct" },
-            { word: "concise", def: "brief and to the point" },
-            { word: "lucid", def: "clear, easy to follow" },
-            { word: "subtle", def: "delicate, not obvious" }
+            { 
+                word: "arduous", 
+                def: "demanding sustained effort", 
+                root: "from Latin arduus (steep, difficult)", 
+                sentence: "Preparing for the SAT is an arduous process." 
+            },
+            { 
+                word: "candid", 
+                def: "honest and direct", 
+                root: "from Latin candidus (white, bright)", 
+                sentence: "She gave a candid opinion about the proposal." 
+            },
+            { 
+                word: "concise", 
+                def: "brief and to the point", 
+                root: "from Latin concisus (cut short)", 
+                sentence: "His essay was short and concise." 
+            },
+            { 
+                word: "lucid", 
+                def: "clear, easy to follow", 
+                root: "from Latin lucidus (light, clear)", 
+                sentence: "The teacher gave a lucid explanation." 
+            },
+            { 
+                word: "subtle", 
+                def: "delicate, not obvious", 
+                root: "from Latin subtilis (fine-woven)", 
+                sentence: "There is a subtle difference between these two words." 
+            }
         ];
 
         var currentIndex = 0;
@@ -139,6 +151,8 @@
 
             document.getElementById("wordBox").innerText = currentWord.word;
             document.getElementById("defBox").innerText = currentWord.def;
+            document.getElementById("rootBox").innerText = "Root: " + currentWord.root;
+            document.getElementById("sentenceBox").innerText = '"' + currentWord.sentence + '"';
 
             currentIndex = currentIndex + 1;
 
@@ -146,7 +160,7 @@
                 currentIndex = 0;
             }
         }
-    <script>
+    </script>
 
 </body>
 </html>
