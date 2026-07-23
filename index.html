@@ -54,6 +54,28 @@
             margin-bottom: 8px;
         }
 
+        button {
+            background-color: #2b3a55;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #1e2a40;
+        }
+
+        #wordBox {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2b3a55;
+        }
+
         footer {
             margin-top: 40px;
             padding: 20px 40px;
@@ -83,14 +105,22 @@
             <li>Math formulas and notes</li>
         </ul>
 
-        <p>This page is just the beginning and my reflection of the third video ı watched on YT. More coming soon as I learn more!</p>
+        <p>This page is just the beginning, the result of my selfeducation by YT tutorials and AI. More coming soon as I learn more!</p>
+
+        <h2>Word of the Day (test button)</h2>
+        <button onclick="showWord()">Show a word</button>
+        <p id="wordBox"></p>
     </main>
 
     <footer>
         <p>Built by Ömer Kısacık - Started July 2026</p>
     </footer>
 
+    <script>
+        function showWord() {
+            document.getElementById("wordBox").innerText = "arduous - demanding sustained effort";
+        }
+    </script>
+
 </body>
 </html>
-
-
