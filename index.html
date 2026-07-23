@@ -10,20 +10,29 @@
             color: #222;
             margin: 0;
             padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #1a1a2e;
+            color: #e0e0e0;
         }
 
         header {
             background-color: #2b3a55;
             color: white;
             padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.dark-mode header {
+            background-color: #16213e;
         }
 
         header h1 {
             margin: 0;
-        }
-
-        nav {
-            margin-top: 10px;
         }
 
         nav a {
@@ -37,6 +46,16 @@
             text-decoration: underline;
         }
 
+        .theme-btn {
+            background-color: #ffd700;
+            color: #222;
+            border: none;
+            padding: 8px 14px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
         main {
             padding: 40px;
             max-width: 900px;
@@ -44,6 +63,10 @@
 
         h2 {
             color: #2b3a55;
+        }
+
+        body.dark-mode h2 {
+            color: #e0e0e0;
         }
 
         p {
@@ -54,17 +77,31 @@
             margin-bottom: 8px;
         }
 
-        .filter-container {
+        .controls-container {
+            display: flex;
+            gap: 15px;
             margin-top: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
         }
 
-        .filter-container select {
-            padding: 8px 12px;
+        .controls-container select, .controls-container input {
+            padding: 10px 14px;
             font-size: 14px;
             border-radius: 4px;
             border: 1px solid #ccc;
             background-color: white;
+        }
+
+        body.dark-mode .controls-container select,
+        body.dark-mode .controls-container input {
+            background-color: #0f3460;
+            color: white;
+            border-color: #1f4068;
+        }
+
+        .controls-container input {
+            flex-grow: 1;
         }
 
         .word-grid {
@@ -113,9 +150,18 @@
             align-items: center;
         }
 
+        body.dark-mode .card-front, body.dark-mode .card-back {
+            border-color: #1f4068;
+        }
+
         .card-front {
             background-color: white;
             color: #2b3a55;
+        }
+
+        body.dark-mode .card-front {
+            background-color: #0f3460;
+            color: #e0e0e0;
         }
 
         .card-back {
@@ -123,6 +169,10 @@
             color: white;
             transform: rotateY(180deg);
             overflow-y: auto;
+        }
+
+        body.dark-mode .card-back {
+            background-color: #16213e;
         }
 
         .word-title {
@@ -167,12 +217,15 @@
 <body>
 
     <header>
-        <h1>SAT Study Space</h1>
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">Vocabulary</a>
-            <a href="#">Practice</a>
-        </nav>
+        <div>
+            <h1>SAT Study Space</h1>
+            <nav>
+                <a href="#">Home</a>
+                <a href="#">Vocabulary</a>
+                <a href="#">Practice</a>
+            </nav>
+        </div>
+        <button class="theme-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </header>
 
     <main>
@@ -191,13 +244,14 @@
         <h2>Vocabulary Words</h2>
         <p>Click on any card to flip and view details.</p>
 
-        <div class="filter-container">
-            <label for="weekFilter">Select Week: </label>
+        <div class="controls-container">
             <select id="weekFilter" onchange="renderWords()">
                 <option value="all">All Weeks</option>
                 <option value="1">Week 1</option>
                 <option value="2">Week 2</option>
             </select>
+
+            <input type="text" id="searchInput" onkeyup="renderWords()" placeholder="Search word or definition...">
         </div>
 
         <div id="wordGrid" class="word-grid"></div>
@@ -207,87 +261,7 @@
         <p>Built by Ömer Kısacık - Started July 2026</p>
     </footer>
 
-    <script>
-        var wordList = [
-            { 
-                word: "arduous", 
-                def: "demanding sustained effort", 
-                root: "from Latin arduus (steep, difficult)", 
-                tr: "çetin, zorlu",
-                sentence: "Preparing for the SAT is an arduous process.",
-                week: 1
-            },
-            { 
-                word: "candid", 
-                def: "honest and direct", 
-                root: "from Latin candidus (white, bright)", 
-                tr: "samimi, içten",
-                sentence: "She gave a candid opinion about the proposal.",
-                week: 1 
-            },
-            { 
-                word: "concise", 
-                def: "brief and to the point", 
-                root: "from Latin concisus (cut short)", 
-                tr: "öz, kısa ve net",
-                sentence: "His essay was short and concise.",
-                week: 1 
-            },
-            { 
-                word: "lucid", 
-                def: "clear, easy to follow", 
-                root: "from Latin lucidus (light, clear)", 
-                tr: "açık, anlaşılır",
-                sentence: "The teacher gave a lucid explanation.",
-                week: 2 
-            },
-            { 
-                word: "subtle", 
-                def: "delicate, not obvious", 
-                root: "from Latin subtilis (fine-woven)", 
-                tr: "ince, göze çarpmayan",
-                sentence: "There is a subtle difference between these two words.",
-                week: 2 
-            }
-        ];
-
-        function renderWords() {
-            var grid = document.getElementById("wordGrid");
-            var selectedWeek = document.getElementById("weekFilter").value;
-            
-            grid.innerHTML = "";
-
-            for (var i = 0; i < wordList.length; i++) {
-                var item = wordList[i];
-                
-                if (selectedWeek === "all" || item.week == selectedWeek) {
-                    var cardHtml = 
-                        '<div class="word-card" onclick="flipCard(this)">' +
-                            '<div class="card-inner">' +
-                                '<div class="card-front">' +
-                                    '<h3 class="word-title">' + item.word + '</h3>' +
-                                    '<p class="card-hint">Click to flip</p>' +
-                                '</div>' +
-                                '<div class="card-back">' +
-                                    '<p class="word-def">' + item.def + '</p>' +
-                                    '<p class="word-root">' + item.root + '</p>' +
-                                    '<p class="word-tr">TR: ' + item.tr + '</p>' +
-                                    '<p class="word-sentence">"' + item.sentence + '"</p>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>';
-
-                    grid.innerHTML += cardHtml;
-                }
-            }
-        }
-
-        function flipCard(cardElement) {
-            cardElement.classList.toggle("flipped");
-        }
-
-        renderWords();
-    </script>
+    <script src="script.js"></script>
 
 </body>
 </html>
