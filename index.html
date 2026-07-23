@@ -69,63 +69,98 @@
 
         .word-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
 
         .word-card {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background-color: transparent;
+            height: 220px;
+            perspective: 1000px;
             cursor: pointer;
             user-select: none;
-            transition: border-color 0.2s;
         }
 
-        .word-card:hover {
-            border-color: #2b3a55;
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .word-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-front {
+            background-color: white;
+            color: #2b3a55;
+        }
+
+        .card-back {
+            background-color: #2b3a55;
+            color: white;
+            transform: rotateY(180deg);
+            overflow-y: auto;
         }
 
         .word-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
-            color: #2b3a55;
-            margin-top: 0;
-            margin-bottom: 10px;
+            margin: 0 0 10px 0;
         }
 
         .card-hint {
             font-size: 12px;
             color: #888;
-            margin-bottom: 0;
             font-style: italic;
-        }
-
-        .card-details {
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 1px dashed #ccc;
+            margin: 0;
         }
 
         .word-def {
             font-size: 14px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .word-root {
             font-size: 12px;
-            color: #666;
+            color: #ddd;
+            margin-bottom: 8px;
+        }
+
+        .word-tr {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffd700;
             margin-bottom: 8px;
         }
 
         .word-sentence {
-            font-size: 13px;
+            font-size: 12px;
             font-style: italic;
-            color: #444;
-            margin-bottom: 0;
+            color: #ccc;
+            margin: 0;
         }
     </style>
 </head>
@@ -154,7 +189,7 @@
         <p>This page is just the beginning. More coming soon as I learn more!</p>
 
         <h2>Vocabulary Words</h2>
-        <p>Click on any card to show or hide its definition.</p>
+        <p>Click on any card to flip and view details.</p>
 
         <div class="filter-container">
             <label for="weekFilter">Select Week: </label>
@@ -178,6 +213,7 @@
                 word: "arduous", 
                 def: "demanding sustained effort", 
                 root: "from Latin arduus (steep, difficult)", 
+                tr: "çetin, zorlu",
                 sentence: "Preparing for the SAT is an arduous process.",
                 week: 1
             },
@@ -185,6 +221,7 @@
                 word: "candid", 
                 def: "honest and direct", 
                 root: "from Latin candidus (white, bright)", 
+                tr: "samimi, içten",
                 sentence: "She gave a candid opinion about the proposal.",
                 week: 1 
             },
@@ -192,6 +229,7 @@
                 word: "concise", 
                 def: "brief and to the point", 
                 root: "from Latin concisus (cut short)", 
+                tr: "öz, kısa ve net",
                 sentence: "His essay was short and concise.",
                 week: 1 
             },
@@ -199,6 +237,7 @@
                 word: "lucid", 
                 def: "clear, easy to follow", 
                 root: "from Latin lucidus (light, clear)", 
+                tr: "açık, anlaşılır",
                 sentence: "The teacher gave a lucid explanation.",
                 week: 2 
             },
@@ -206,6 +245,7 @@
                 word: "subtle", 
                 def: "delicate, not obvious", 
                 root: "from Latin subtilis (fine-woven)", 
+                tr: "ince, göze çarpmayan",
                 sentence: "There is a subtle difference between these two words.",
                 week: 2 
             }
@@ -222,13 +262,18 @@
                 
                 if (selectedWeek === "all" || item.week == selectedWeek) {
                     var cardHtml = 
-                        '<div class="word-card" onclick="toggleCard(this)">' +
-                            '<h3 class="word-title">' + item.word + '</h3>' +
-                            '<p class="card-hint">Click to show definition</p>' +
-                            '<div class="card-details" style="display: none;">' +
-                                '<p class="word-def">' + item.def + '</p>' +
-                                '<p class="word-root"><strong>Root:</strong> ' + item.root + '</p>' +
-                                '<p class="word-sentence">"' + item.sentence + '"</p>' +
+                        '<div class="word-card" onclick="flipCard(this)">' +
+                            '<div class="card-inner">' +
+                                '<div class="card-front">' +
+                                    '<h3 class="word-title">' + item.word + '</h3>' +
+                                    '<p class="card-hint">Click to flip</p>' +
+                                '</div>' +
+                                '<div class="card-back">' +
+                                    '<p class="word-def">' + item.def + '</p>' +
+                                    '<p class="word-root">' + item.root + '</p>' +
+                                    '<p class="word-tr">TR: ' + item.tr + '</p>' +
+                                    '<p class="word-sentence">"' + item.sentence + '"</p>' +
+                                '</div>' +
                             '</div>' +
                         '</div>';
 
@@ -237,17 +282,8 @@
             }
         }
 
-        function toggleCard(cardElement) {
-            var details = cardElement.querySelector(".card-details");
-            var hint = cardElement.querySelector(".card-hint");
-
-            if (details.style.display === "none") {
-                details.style.display = "block";
-                hint.innerText = "Click to hide definition";
-            } else {
-                details.style.display = "none";
-                hint.innerText = "Click to show definition";
-            }
+        function flipCard(cardElement) {
+            cardElement.classList.toggle("flipped");
         }
 
         renderWords();
