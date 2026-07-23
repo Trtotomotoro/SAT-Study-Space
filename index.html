@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="eng">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SAT Study Space, or might be Teach SAT Words, Master! smt. like that</title>
+    <title>SAT Study Space</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f0;
-            color: #0b0707;
+            color: #222;
             margin: 0;
             padding: 0;
         }
@@ -27,7 +27,7 @@
         }
 
         nav a {
-            color: rgb(188, 169, 169);
+            color: rgb(53, 207, 32);
             text-decoration: none;
             margin-right: 20px;
             font-size: 14px;
@@ -58,7 +58,7 @@
             background-color: #2b3a55;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 18px;
             font-size: 14px;
             border-radius: 4px;
             cursor: pointer;
@@ -71,15 +71,14 @@
 
         #wordBox {
             margin-top: 15px;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             color: #2b3a55;
         }
 
         #defBox {
-            font-size: 14px;
+            font-size: 15px;
             color: #444;
-            font-weight: normal;
         }
 
         footer {
@@ -124,30 +123,30 @@
     </footer>
 
     <script>
-// Handful of words that will be displayed in site, more will be added as a get the whole list of words via by my course.
+      
         var wordList = [
-            "arduous - deamanding sustained effort, hard",
-            "candid - honest and direct",
-            "concise - brief and to the point",
-            "lucid - clear, easy to follow",
-            "subtle - delicate, not obvious",
+            { word: "arduous", def: "demanding sustained effort" },
+            { word: "candid", def: "honest and direct" },
+            { word: "concise", def: "brief and to the point" },
+            { word: "lucid", def: "clear, easy to follow" },
+            { word: "subtle", def: "delicate, not obvious" }
         ];
 
         var currentIndex = 0;
 
         function showNextWord() {
-            var wordText = wordList[currentIndex];
+            var currentWord = wordList[currentIndex];
 
-            document.getElementById("wordBox").innerText = wordText;
+            document.getElementById("wordBox").innerText = currentWord.word;
+            document.getElementById("defBox").innerText = currentWord.def;
 
             currentIndex = currentIndex + 1;
 
-        
             if (currentIndex >= wordList.length) {
                 currentIndex = 0;
             }
         }
-    </script>
+    <script>
 
 </body>
 </html>
