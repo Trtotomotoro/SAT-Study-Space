@@ -57,6 +57,25 @@ function saveProgress() {
     localStorage.setItem("sat_mastered_words", JSON.stringify(masteredWords));
 }
 
+function speakWord(wordText, event) {
+    event.stopPropagation();
+    if ('speechSynthesis' in window) {
+        var utterance = new SpeechSynthesisUtterance(wordText);
+        utterance.lang = 'en-US';
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
+function shuffleWords() {
+    for (var i = wordList.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = wordList[i];
+        wordList[i] = wordList[j];
+        wordList[j] = temp;
+    }
+    renderWords();
+}
+
 function toggleMastered(wordId, event) {
     event.stopPropagation();
     
@@ -108,7 +127,10 @@ function renderWords() {
                             '<span class="master-badge">Mastered</span>' +
                             '<h3 class="word-title">' + item.word + '</h3>' +
                             '<p class="card-hint">Click to flip</p>' +
-                            '<button class="master-btn" onclick="toggleMastered(\'' + item.id + '\', event)">' + buttonText + '</button>' +
+                            '<div class="card-actions">' +
+                                '<button class="audio-btn" onclick="speakWord(\'' + item.word + '\', event)">🔊 Listen</button>' +
+                                '<button class="master-btn" onclick="toggleMastered(\'' + item.id + '\', event)">' + buttonText + '</button>' +
+                            '</div>' +
                         '</div>' +
                         '<div class="card-back">' +
                             '<p class="word-def">' + item.def + '</p>' +
