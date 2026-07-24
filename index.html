@@ -13,7 +13,7 @@
             <nav>
                 <a href="#">Home</a>
                 <a href="#">Vocabulary</a>
-                <a href="#">Practice</a>
+                <a href="#" onclick="startQuiz()">Practice Quiz</a>
             </nav>
         </div>
         <button class="theme-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
@@ -25,6 +25,7 @@
         <div class="stats-card">
             <div class="stats-info">
                 <span id="progressText">0 / 0 Words Mastered</span>
+                <button class="reset-btn" onclick="resetProgress()">Reset Progress</button>
                 <span id="progressPercent">0%</span>
             </div>
             <div class="progress-bar-bg">
@@ -32,17 +33,22 @@
             </div>
         </div>
 
-        <div class="controls-container">
+        <div id="controlsContainer" class="controls-container">
             <select id="weekFilter" onchange="renderWords()">
                 <option value="all">All Weeks</option>
-                <option value="1">Week 1</option>
-                <option value="2">Week 2</option>
             </select>
 
             <input type="text" id="searchInput" onkeyup="renderWords()" placeholder="Search word or definition...">
             
+            <label class="hide-mastered-label">
+                <input type="checkbox" id="hideMasteredCheckbox" onchange="renderWords()"> Hide Mastered
+            </label>
+
             <button class="action-btn" onclick="shuffleWords()">🔀 Shuffle</button>
+            <button class="action-btn" onclick="startQuiz()">🎯 Start Quiz</button>
         </div>
+
+        <div id="quizContainer"></div>
 
         <div id="wordGrid" class="word-grid"></div>
     </main>

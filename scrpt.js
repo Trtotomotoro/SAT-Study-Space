@@ -123,6 +123,8 @@ function launchConfetti(originX, originY) {
 
 function populateWeekFilter() {
     var select = document.getElementById("weekFilter");
+    if (!select) return;
+
     var weeks = [];
 
     for (var i = 0; i < wordList.length; i++) {
@@ -179,7 +181,8 @@ function renderWords() {
         var matchesWeek = (selectedWeek === "all" || item.week == selectedWeek);
         var matchesSearch = item.word.toLowerCase().includes(searchQuery) || 
                             item.def.toLowerCase().includes(searchQuery);
-        var hideMastered = document.getElementById("hideMasteredCheckbox").checked;
+        var hideMasteredCheckbox = document.getElementById("hideMasteredCheckbox");
+        var hideMastered = hideMasteredCheckbox ? hideMasteredCheckbox.checked : false;
         var passesMasteredFilter = !hideMastered || !isMastered;
 
         if (matchesWeek && matchesSearch && passesMasteredFilter) {
