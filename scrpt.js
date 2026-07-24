@@ -143,6 +143,16 @@ function populateWeekFilter() {
     }
 }
 
+function resetProgress() {
+    var confirmed = confirm("Are you sure you want to reset all your progress? This cannot be undone.");
+    if (confirmed) {
+        masteredWords = [];
+        saveProgress();
+        renderWords();
+        updateStats();
+    }
+}
+
 function updateStats() {
     var total = wordList.length;
     var count = masteredWords.length;
