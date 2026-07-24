@@ -302,3 +302,52 @@ body.dark-mode .card-back {
 .mastered .master-badge {
     display: inline-block;
 }
+
+/* confetti pieces that fly out when a word gets marked as mastered */
+.confetti-piece {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 999;
+    animation: confetti-fall 1.2s ease-out forwards;
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x-end), var(--y-end)) rotate(var(--rot-end));
+        opacity: 0;
+    }
+}
+
+/* checked my site on my phone and the cards were way too squished, this fixes it */
+@media (max-width: 600px) {
+    main {
+        padding: 20px;
+    }
+
+    header {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .word-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .controls-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .controls-container input {
+        width: 100%;
+    }
+}
