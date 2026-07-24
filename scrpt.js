@@ -227,5 +227,133 @@ function flipCard(cardElement) {
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
 }
+
+var quizQuestions = [];
+var quizIndex = 0;
+var quizScore = 0;
+var quizAnswered = false;
+
+function startQuiz() {
+    quizQuestions = wordList.slice();
+
+    for (var i = quizQuestions.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = quizQuestions[i];
+        quizQuestions[i] = quizQuestions[j];
+        quizQuestions[j] = temp;
+    }
+
+    quizIndex = 0;
+    quizScore = 0;
+    quizAnswered = false;
+
+    document.getElementById("wordGrid").style.display = "none";
+    document.getElementById("controlsContainer").style.display = "none";
+    document.getElementById("quizContainer").style.display = "block";
+
+    showQuizQuestion();
+}
+
+function showQuizQuestion() {
+    quizAnswered = false;
+
+    var question = quizQuestions[quizIndex];
+
+    var wrongDefs = [];
+    for (var i = 0; i < wordList.length; i++) {
+        if (wordList[i].id !== question.id) {
+            wrongDefs.push(wordList[i].def);
+        }
+    }
+
+    for (var i = wrongDefs.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = wrongDefs[i];
+        wrongDefs[i] = wrongDefs[j];
+        wrongDefs[j] = temp;
+    }
+
+    var choices = wrongDefs.slice(0, 3);
+    choices.push(question.def);
+
+    for (var i = choices.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = choices[i];
+        choices[i] = choices[j];
+        choices[j] = temp;
+    }
+
+    var questionHtml = '<p class="quiz-progress">Question ' + (quizIndex + 1) + ' of ' + quizQuestions.length + '</p>';
+    questionHtml += '<h3 class="quiz-word">' + question.word + '</h3>';
+    questionHtml += '<p class="quiz-instruction">What does this word mean?</p>';
+    questionHtml += '<div class="quiz-choices">';
+
+    for (var i = 0; i < choices.length; i++) {
+        questionHtml += '<button class="quiz-choice-btn" onclick="checkQuizAnswer(this, \'' + question.def.replace(/'/g, "\\'") + '\')">' + choices[i] + '</button>';
+    }
+
+    questionHtml += '</div>';
+    questionHtml += '<p id="quizFeedback" class="quiz-feedback"></p>';
+    questionHtml += '<button id="quizNextBtn" class="action-btn quiz-next-btn" onclick="nextQuizQuestion()" style="display:none;">Next Question</button>';
+
+    document.getElementById("quizContainer").innerHTML = questionHtml;
+}
+
+function checkQuizAnswer(buttonEl, correctDef) {
+    if (quizAnswered) {
+        return;
+    }
+    quizAnswered = true;
+
+    var allButtons = document.getElementsByClassName("quiz-choice-btn");
+    var isCorrect = buttonEl.innerText === correctDef;
+
+    for (var i = 0; i < allButtons.length; i++) {
+        allButtons[i].disabled = true;
+        if (allButtons[i].innerText === correctDef) {
+            allButtons[i].classList.add("quiz-correct");
+        }
+    }
+
+    if (isCorrect) {
+        quizScore = quizScore + 1;
+        document.getElementById("quizFeedback").innerText = "Correct!";
+        document.getElementById("quizFeedback").className = "quiz-feedback quiz-feedback-correct";
+    } else {
+        buttonEl.classList.add("quiz-wrong");
+        document.getElementById("quizFeedback").innerText = "Not quite, the correct answer is highlighted above.";
+        document.getElementById("quizFeedback").className = "quiz-feedback quiz-feedback-wrong";
+    }
+
+    document.getElementById("quizNextBtn").style.display = "inline-block";
+}
+
+function nextQuizQuestion() {
+    quizIndex = quizIndex + 1;
+
+    if (quizIndex >= quizQuestions.length) {
+        showQuizResults();
+    } else {
+        showQuizQuestion();
+    }
+}
+
+function showQuizResults() {
+    var percentage = Math.round((quizScore / quizQuestions.length) * 100);
+
+    var resultsHtml = '<h3 class="quiz-word">Quiz Complete!</h3>';
+    resultsHtml += '<p class="quiz-instruction">You scored ' + quizScore + ' out of ' + quizQuestions.length + ' (' + percentage + '%)</p>';
+    resultsHtml += '<button class="action-btn" onclick="startQuiz()">Try Again</button> ';
+    resultsHtml += '<button class="action-btn quiz-exit-btn" onclick="exitQuiz()">Back to Word List</button>';
+
+    document.getElementById("quizContainer").innerHTML = resultsHtml;
+}
+
+function exitQuiz() {
+    document.getElementById("quizContainer").style.display = "none";
+    document.getElementById("wordGrid").style.display = "grid";
+    document.getElementById("controlsContainer").style.display = "flex";
+}
+
 populateWeekFilter();
 renderWords();
