@@ -179,8 +179,10 @@ function renderWords() {
         var matchesWeek = (selectedWeek === "all" || item.week == selectedWeek);
         var matchesSearch = item.word.toLowerCase().includes(searchQuery) || 
                             item.def.toLowerCase().includes(searchQuery);
+        var hideMastered = document.getElementById("hideMasteredCheckbox").checked;
+        var passesMasteredFilter = !hideMastered || !isMastered;
 
-        if (matchesWeek && matchesSearch) {
+        if (matchesWeek && matchesSearch && passesMasteredFilter) {
             var cardClass = isMastered ? "word-card mastered" : "word-card";
             var buttonText = isMastered ? "Mastered ✓" : "Mark as Mastered";
 
