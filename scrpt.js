@@ -92,8 +92,6 @@ function toggleMastered(wordId, event) {
     updateStats();
 }
 
-// found a simple confetti trick online, just makes little colored
-// squares fly out from where you clicked and fall down while fading
 function launchConfetti(originX, originY) {
     var colors = ["#2e7d32", "#ffd700", "#2b3a55", "#e74c3c", "#3498db"];
     var pieceCount = 18;
@@ -105,8 +103,6 @@ function launchConfetti(originX, originY) {
         piece.style.top = originY + "px";
         piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
 
-        // random direction for each piece so they scatter instead of
-        // all flying the exact same way
         var xEnd = (Math.random() - 0.5) * 200;
         var yEnd = Math.random() * 150 + 80;
         var rotEnd = Math.random() * 360;
@@ -117,13 +113,33 @@ function launchConfetti(originX, originY) {
 
         document.body.appendChild(piece);
 
-        // clean up the piece after the animation finishes so we don't
-        // fill up the page with invisible leftover elements
         (function (el) {
             setTimeout(function () {
                 el.remove();
             }, 1200);
         })(piece);
+    }
+}
+
+function populateWeekFilter() {
+    var select = document.getElementById("weekFilter");
+    var weeks = [];
+
+    for (var i = 0; i < wordList.length; i++) {
+        var w = wordList[i].week;
+        if (weeks.indexOf(w) === -1) {
+            weeks.push(w);
+        }
+    }
+
+    weeks.sort(function (a, b) {
+        return a - b;
+    });
+
+    select.innerHTML = '<option value="all">All Weeks</option>';
+
+    for (var j = 0; j < weeks.length; j++) {
+        select.innerHTML += '<option value="' + weeks[j] + '">Week ' + weeks[j] + '</option>';
     }
 }
 
@@ -143,6 +159,8 @@ function renderWords() {
     var searchQuery = document.getElementById("searchInput").value.toLowerCase();
     
     grid.innerHTML = "";
+
+    var matchCount = 0;
 
     for (var i = 0; i < wordList.length; i++) {
         var item = wordList[i];
@@ -179,7 +197,12 @@ function renderWords() {
                 '</div>';
 
             grid.innerHTML += cardHtml;
+            matchCount = matchCount + 1;
         }
+    }
+
+    if (matchCount === 0) {
+        grid.innerHTML = '<p class="no-results">No words match your search. Try a different word or clear the filter.</p>';
     }
 
     updateStats();
@@ -192,7 +215,5 @@ function flipCard(cardElement) {
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
 }
-
+populateWeekFilter();
 renderWords();
-
-

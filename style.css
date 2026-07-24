@@ -303,7 +303,18 @@ body.dark-mode .card-back {
     display: inline-block;
 }
 
-/* confetti pieces that fly out when a word gets marked as mastered */
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 30px 0;
+}
+
+body.dark-mode .no-results {
+    color: #aaa;
+}
+
 .confetti-piece {
     position: fixed;
     top: 0;
@@ -327,7 +338,6 @@ body.dark-mode .card-back {
     }
 }
 
-/* checked my site on my phone and the cards were way too squished, this fixes it */
 @media (max-width: 600px) {
     main {
         padding: 20px;
@@ -351,3 +361,4 @@ body.dark-mode .card-back {
         width: 100%;
     }
 }
+
